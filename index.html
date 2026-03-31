@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>請求書・領収書 生成ツール</title>
+<title>è«æ±æ¸ã»é åæ¸ çæãã¼ã«</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -46,7 +46,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 /* === Invoice (A4: 210mm x 297mm) === */
 .invoice-page{width:210mm;min-height:297mm;background:var(--white);padding:15mm 20mm 20mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
 
-/* === Receipt (B5変形: 128mm x 182mm) === */
+/* === Receipt (B5å¤å½¢: 128mm x 182mm) === */
 .receipt-page{width:128mm;min-height:182mm;background:var(--white);padding:10mm 12mm 12mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
 
 /* === Common Document Styles === */
@@ -98,9 +98,9 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 .issuer-area .company{font-size:12pt;font-weight:bold}
 
 /* === Receipt specific === */
-.stamp-area{position:absolute;top:10mm;right:12mm;width:25mm;height:25mm;border:1px solid #000;display:flex;align-items:center;justify-content:center;font-size:7pt;color:#999}
+.stamp-area{position:absolute;top:8mm;right:12mm;width:25mm;height:25mm;border:1px solid #000;display:flex;align-items:center;justify-content:center;font-size:7pt;color:#999;z-index:5}
 .receipt-but{font-size:10pt;margin-bottom:4mm}
-.receipt-担当{font-size:9pt;text-align:right;margin-top:4mm}
+.receipt-æå½{font-size:9pt;text-align:right;margin-top:4mm}
 
 /* === Draft Stamp === */
 .draft-stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:60pt;color:rgba(255,0,0,0.15);font-weight:bold;letter-spacing:20pt;pointer-events:none;z-index:10;white-space:nowrap}
@@ -133,93 +133,93 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 <body>
 
 <div class="nav">
-  <span class="nav-title">📄 請求書・領収書 生成ツール</span>
-  <button id="tabInvoice" class="active" onclick="switchTab('invoice')">請求書</button>
-  <button id="tabReceipt" onclick="switchTab('receipt')">領収書</button>
+  <span class="nav-title">ð è«æ±æ¸ã»é åæ¸ çæãã¼ã«</span>
+  <button id="tabInvoice" class="active" onclick="switchTab('invoice')">è«æ±æ¸</button>
+  <button id="tabReceipt" onclick="switchTab('receipt')">é åæ¸</button>
 </div>
 
 <!-- ===== Invoice Controls ===== -->
 <div class="controls" id="invoiceControls">
-  <h3>請求書 入力</h3>
+  <h3>è«æ±æ¸ å¥å</h3>
   <div class="form-row">
-    <div class="form-group"><label>請求書番号</label><input id="invNo" value="No. 2026-010-101"></div>
-    <div class="form-group"><label>請求日</label><input type="date" id="invDate" value="2026-04-01"></div>
-    <div class="form-group"><label>振込期限</label><input type="date" id="invDue" value="2026-04-30"></div>
+    <div class="form-group"><label>è«æ±æ¸çªå·</label><input id="invNo" value="No. 2026-010-101"></div>
+    <div class="form-group"><label>è«æ±æ¥</label><input type="date" id="invDate" value="2026-04-01"></div>
+    <div class="form-group"><label>æ¯è¾¼æé</label><input type="date" id="invDue" value="2026-04-30"></div>
   </div>
   <div class="form-row">
-    <div class="form-group"><label>宛先</label><input id="invTo" value="合同会社デモフード"></div>
-    <div class="form-group"><label>担当者</label><input id="invTanto" value="山田太郎"></div>
-    <div class="form-group"><label>工事名</label><input id="invKoji" value="○○ビル改修工事"></div>
+    <div class="form-group"><label>å®å</label><input id="invTo" value="ååä¼ç¤¾ãã¢ãã¼ã"></div>
+    <div class="form-group"><label>æå½è</label><input id="invTanto" value="å±±ç°å¤ªé"></div>
+    <div class="form-group"><label>å·¥äºå</label><input id="invKoji" value="ââãã«æ¹ä¿®å·¥äº"></div>
   </div>
   <div class="form-row">
-    <div class="form-group" style="flex:2"><label>発行元 会社名</label><input id="invCompany" value="株式会社サンプル建設"></div>
-    <div class="form-group" style="flex:3"><label>発行元 住所</label><input id="invAddr" value="東京都千代田区丸の内1-1-1 サンプルビル3F"></div>
+    <div class="form-group" style="flex:2"><label>çºè¡å ä¼ç¤¾å</label><input id="invCompany" value="æ ªå¼ä¼ç¤¾ãµã³ãã«å»ºè¨­"></div>
+    <div class="form-group" style="flex:3"><label>çºè¡å ä½æ</label><input id="invAddr" value="æ±äº¬é½åä»£ç°åºä¸¸ã®å1-1-1 ãµã³ãã«ãã«3F"></div>
   </div>
   <div class="form-row">
-    <div class="form-group"><label>発行元 TEL</label><input id="invTel" value="03-1234-5678"></div>
-    <div class="form-group"><label>発行元 FAX</label><input id="invFax" value="03-1234-5679"></div>
-    <div class="form-group"><label>登録番号</label><input id="invRegNo" value="T1234567890123"></div>
+    <div class="form-group"><label>çºè¡å TEL</label><input id="invTel" value="03-1234-5678"></div>
+    <div class="form-group"><label>çºè¡å FAX</label><input id="invFax" value="03-1234-5679"></div>
+    <div class="form-group"><label>ç»é²çªå·</label><input id="invRegNo" value="T1234567890123"></div>
   </div>
 
-  <h3 style="margin-top:12px">明細 <button class="btn btn-add" onclick="addInvRow()">＋ 行追加</button></h3>
+  <h3 style="margin-top:12px">æç´° <button class="btn btn-add" onclick="addInvRow()">ï¼ è¡è¿½å </button></h3>
   <table class="detail-edit" id="invDetailEdit">
-    <thead><tr><th>名称</th><th>仕様</th><th style="width:60px">数量</th><th style="width:50px">単位</th><th style="width:90px">単価</th><th style="width:50px">税率</th><th style="width:100px">金額</th><th style="width:40px"></th></tr></thead>
+    <thead><tr><th>åç§°</th><th>ä»æ§</th><th style="width:60px">æ°é</th><th style="width:50px">åä½</th><th style="width:90px">åä¾¡</th><th style="width:50px">ç¨ç</th><th style="width:100px">éé¡</th><th style="width:40px"></th></tr></thead>
     <tbody id="invRows"></tbody>
   </table>
 
   <div class="form-row" style="margin-top:12px">
-    <div class="form-group" style="flex:3"><label>備考</label><textarea id="invRemarks">お振込手数料はご負担願います。</textarea></div>
+    <div class="form-group" style="flex:3"><label>åè</label><textarea id="invRemarks">ãæ¯è¾¼ææ°æã¯ãè² æé¡ãã¾ãã</textarea></div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-draft" onclick="toggleDraft('invoice')">下書きON/OFF</button>
-    <button class="btn btn-print" onclick="printDoc('invoice')">🖨️ 印刷</button>
-    <button class="btn btn-pdf" onclick="exportPDF('invoice')">📥 PDF出力</button>
+    <button class="btn btn-draft" onclick="toggleDraft('invoice')">ä¸æ¸ãON/OFF</button>
+    <button class="btn btn-print" onclick="printDoc('invoice')">ð¨ï¸ å°å·</button>
+    <button class="btn btn-pdf" onclick="exportPDF('invoice')">ð¥ PDFåºå</button>
   </div>
 </div>
 
 <!-- ===== Receipt Controls ===== -->
 <div class="controls" id="receiptControls" style="display:none">
-  <h3>領収書 入力</h3>
+  <h3>é åæ¸ å¥å</h3>
   <div class="form-row">
-    <div class="form-group"><label>日付</label><input type="date" id="rcpDate" value="2026-04-01"></div>
-    <div class="form-group"><label>宛先</label><input id="rcpTo" value="合同会社デモフード"></div>
-    <div class="form-group"><label>担当者</label><input id="rcpTanto" value="山田太郎"></div>
+    <div class="form-group"><label>æ¥ä»</label><input type="date" id="rcpDate" value="2026-04-01"></div>
+    <div class="form-group"><label>å®å</label><input id="rcpTo" value="ååä¼ç¤¾ãã¢ãã¼ã"></div>
+    <div class="form-group"><label>æå½è</label><input id="rcpTanto" value="å±±ç°å¤ªé"></div>
   </div>
   <div class="form-row">
-    <div class="form-group"><label>金額（税込）</label><input type="number" id="rcpAmount" value="137500"></div>
-    <div class="form-group"><label>8%対象額（税抜）</label><input type="number" id="rcp8base" value="0"></div>
-    <div class="form-group"><label>10%対象額（税抜）</label><input type="number" id="rcp10base" value="125000"></div>
+    <div class="form-group"><label>éé¡ï¼ç¨è¾¼ï¼</label><input type="number" id="rcpAmount" value="137500"></div>
+    <div class="form-group"><label>8%å¯¾è±¡é¡ï¼ç¨æï¼</label><input type="number" id="rcp8base" value="0"></div>
+    <div class="form-group"><label>10%å¯¾è±¡é¡ï¼ç¨æï¼</label><input type="number" id="rcp10base" value="125000"></div>
   </div>
   <div class="form-row">
-    <div class="form-group" style="flex:2"><label>発行元 会社名</label><input id="rcpCompany" value="株式会社サンプル建設"></div>
-    <div class="form-group" style="flex:3"><label>発行元 住所</label><input id="rcpAddr" value="東京都千代田区丸の内1-1-1 サンプルビル3F"></div>
+    <div class="form-group" style="flex:2"><label>çºè¡å ä¼ç¤¾å</label><input id="rcpCompany" value="æ ªå¼ä¼ç¤¾ãµã³ãã«å»ºè¨­"></div>
+    <div class="form-group" style="flex:3"><label>çºè¡å ä½æ</label><input id="rcpAddr" value="æ±äº¬é½åä»£ç°åºä¸¸ã®å1-1-1 ãµã³ãã«ãã«3F"></div>
   </div>
   <div class="form-row">
-    <div class="form-group"><label>発行元 TEL</label><input id="rcpTel" value="03-1234-5678"></div>
-    <div class="form-group"><label>登録番号</label><input id="rcpRegNo" value="T1234567890123"></div>
+    <div class="form-group"><label>çºè¡å TEL</label><input id="rcpTel" value="03-1234-5678"></div>
+    <div class="form-group"><label>ç»é²çªå·</label><input id="rcpRegNo" value="T1234567890123"></div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-draft" onclick="toggleDraft('receipt')">下書きON/OFF</button>
-    <button class="btn btn-print" onclick="printDoc('receipt')">🖨️ 印刷</button>
-    <button class="btn btn-pdf" onclick="exportPDF('receipt')">📥 PDF出力</button>
+    <button class="btn btn-draft" onclick="toggleDraft('receipt')">ä¸æ¸ãON/OFF</button>
+    <button class="btn btn-print" onclick="printDoc('receipt')">ð¨ï¸ å°å·</button>
+    <button class="btn btn-pdf" onclick="exportPDF('receipt')">ð¥ PDFåºå</button>
   </div>
 </div>
 
 <!-- ===== Invoice Preview ===== -->
 <div class="preview-container" id="invoicePreview">
   <div class="invoice-page" id="invoicePage">
-    <div class="draft-stamp hidden" id="invoiceDraft">下 書 き</div>
-    <div class="page-num">1/1 ページ</div>
-    <div class="doc-header"><span class="doc-title">御 請 求 書</span></div>
+    <div class="draft-stamp hidden" id="invoiceDraft">ä¸ æ¸ ã</div>
+    <div class="page-num">1/1 ãã¼ã¸</div>
+    <div class="doc-header"><span class="doc-title">å¾¡ è« æ± æ¸</span></div>
     <div class="doc-no" id="pInvNo"></div>
 
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4mm">
       <div style="flex:1">
         <div class="doc-to" id="pInvTo"></div>
         <div style="font-size:9pt;margin-bottom:3mm" id="pInvTantoLine"></div>
-        <div class="doc-greeting">平素は格別のお引き立てを賜り厚く御礼申し上げます。<br>下記の通りご請求申し上げます。</div>
+        <div class="doc-greeting">å¹³ç´ ã¯æ ¼å¥ã®ãå¼ãç«ã¦ãè³ãåãå¾¡ç¤¼ç³ãä¸ãã¾ãã<br>ä¸è¨ã®éããè«æ±ç³ãä¸ãã¾ãã</div>
       </div>
       <div class="doc-date-area">
         <div id="pInvDate"></div>
@@ -228,31 +228,31 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
       </div>
     </div>
 
-    <div class="construction-row">工事名：<span id="pInvKoji"></span></div>
+    <div class="construction-row">å·¥äºåï¼<span id="pInvKoji"></span></div>
     <div class="amount-box" id="pInvAmount"></div>
 
     <table class="detail-table">
-      <thead><tr><th>名称</th><th>仕様</th><th>数量</th><th>単位</th><th>単価</th><th>金額</th></tr></thead>
+      <thead><tr><th>åç§°</th><th>ä»æ§</th><th>æ°é</th><th>åä½</th><th>åä¾¡</th><th>éé¡</th></tr></thead>
       <tbody id="pInvDetailBody"></tbody>
     </table>
 
     <div style="display:flex;gap:4mm">
       <div style="flex:1">
         <table class="summary-table">
-          <tr><td class="label">小計 ①</td><td class="value" id="pInvSubtotal"></td></tr>
-          <tr><td class="label">消費税等 ② (❹+❺)</td><td class="value" id="pInvTax"></td></tr>
-          <tr><td class="label">合計金額 ③ (①+②)</td><td class="value" id="pInvTotal"></td></tr>
+          <tr><td class="label">å°è¨ â </td><td class="value" id="pInvSubtotal"></td></tr>
+          <tr><td class="label">æ¶è²»ç¨ç­ â¡ (â¹+âº)</td><td class="value" id="pInvTax"></td></tr>
+          <tr><td class="label">åè¨éé¡ â¢ (â +â¡)</td><td class="value" id="pInvTotal"></td></tr>
         </table>
         <div class="tax-detail">
           <table>
-            <tr><td class="label">(8%) 消費税合計 ❹</td><td class="value" id="pInvTax8"></td></tr>
-            <tr><td class="label">(10%) 消費税合計 ❺</td><td class="value" id="pInvTax10"></td></tr>
+            <tr><td class="label">(8%) æ¶è²»ç¨åè¨ â¹</td><td class="value" id="pInvTax8"></td></tr>
+            <tr><td class="label">(10%) æ¶è²»ç¨åè¨ âº</td><td class="value" id="pInvTax10"></td></tr>
           </table>
         </div>
       </div>
     </div>
 
-    <div class="remarks-box"><div class="remarks-label">備考</div><div id="pInvRemarks"></div></div>
+    <div class="remarks-box"><div class="remarks-label">åè</div><div id="pInvRemarks"></div></div>
 
     <div class="issuer-area" id="pIssuerBottom"></div>
   </div>
@@ -261,33 +261,33 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 <!-- ===== Receipt Preview ===== -->
 <div class="preview-container" id="receiptPreview" style="display:none">
   <div class="receipt-page" id="receiptPage">
-    <div class="draft-stamp hidden" id="receiptDraft">下 書 き</div>
-    <div class="stamp-area">収入<br>印紙</div>
-    <div class="doc-header" style="margin-top:2mm"><span class="doc-title">領 収 書</span></div>
+    <div class="draft-stamp hidden" id="receiptDraft">ä¸ æ¸ ã</div>
+    <div class="stamp-area">åå¥<br>å°ç´</div>
+    <div class="doc-header" style="margin-top:2mm"><span class="doc-title">é  å æ¸</span></div>
 
-    <div style="text-align:right;font-size:9pt;margin-bottom:3mm" id="pRcpDate"></div>
+    <div style="text-align:right;font-size:9pt;margin-top:16mm;margin-bottom:3mm" id="pRcpDate"></div>
     <div class="doc-to" id="pRcpTo" style="font-size:12pt"></div>
 
     <div class="amount-box" id="pRcpAmount"></div>
 
-    <div class="receipt-but">但し 上記正に領収いたしました。</div>
+    <div class="receipt-but">ä½ã ä¸è¨æ­£ã«é åãããã¾ããã</div>
 
     <div style="font-size:8pt;margin-bottom:3mm">
       <table class="summary-table" style="font-size:8pt">
-        <tr><td class="label">小計 ①</td><td class="value" id="pRcpSubtotal"></td></tr>
-        <tr><td class="label">消費税等 ② (❹+❺)</td><td class="value" id="pRcpTax"></td></tr>
-        <tr><td class="label">合計 ③ (①+②)</td><td class="value" id="pRcpTotal"></td></tr>
+        <tr><td class="label">å°è¨ â </td><td class="value" id="pRcpSubtotal"></td></tr>
+        <tr><td class="label">æ¶è²»ç¨ç­ â¡ (â¹+âº)</td><td class="value" id="pRcpTax"></td></tr>
+        <tr><td class="label">åè¨ â¢ (â +â¡)</td><td class="value" id="pRcpTotal"></td></tr>
       </table>
       <div class="tax-detail" style="margin-top:2mm">
         <table>
-          <tr><td class="label">(8%) 消費税合計 ❹</td><td class="value" id="pRcpTax8"></td></tr>
-          <tr><td class="label">(10%) 消費税合計 ❺</td><td class="value" id="pRcpTax10"></td></tr>
+          <tr><td class="label">(8%) æ¶è²»ç¨åè¨ â¹</td><td class="value" id="pRcpTax8"></td></tr>
+          <tr><td class="label">(10%) æ¶è²»ç¨åè¨ âº</td><td class="value" id="pRcpTax10"></td></tr>
         </table>
       </div>
     </div>
 
     <div class="issuer-area" id="pRcpIssuer" style="font-size:8pt;line-height:1.6"></div>
-    <div class="receipt-担当" id="pRcpTantoLine"></div>
+    <div class="receipt-æå½" id="pRcpTantoLine"></div>
   </div>
 </div>
 
@@ -295,7 +295,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 // === State ===
 let invoiceDraft = false, receiptDraft = false;
 let invDetail = [
-  { name: '現場作業員派遣', spec: '日勤・8時間', qty: 5, unit: '人', price: 25000, taxRate: 10 }
+  { name: 'ç¾å ´ä½æ¥­å¡æ´¾é£', spec: 'æ¥å¤ã»8æé', qty: 5, unit: 'äºº', price: 25000, taxRate: 10 }
 ];
 
 // === Tab Switch ===
@@ -309,11 +309,11 @@ function switchTab(tab) {
 }
 
 // === Format ===
-function fmt(n) { return '¥' + Math.floor(n).toLocaleString(); }
+function fmt(n) { return 'Â¥' + Math.floor(n).toLocaleString(); }
 function fmtDate(d) {
   if (!d) return '';
   const dt = new Date(d);
-  return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日';
+  return dt.getFullYear() + 'å¹´' + (dt.getMonth()+1) + 'æ' + dt.getDate() + 'æ¥';
 }
 
 // === Invoice Detail Rows ===
@@ -330,12 +330,12 @@ function renderInvRows() {
       '<td><input type="number" value="' + r.price + '" onchange="updInvRow('+i+',\'price\',this.value)"></td>' +
       '<td><select onchange="updInvRow('+i+',\'taxRate\',this.value)"><option value="10"' + (r.taxRate==10?' selected':'') + '>10%</option><option value="8"' + (r.taxRate==8?' selected':'') + '>8%</option></select></td>' +
       '<td style="text-align:right;padding:8px;font-weight:bold">' + fmt(amount) + '</td>' +
-      '<td><button class="btn-del" onclick="delInvRow('+i+')">✕</button></td>' +
+      '<td><button class="btn-del" onclick="delInvRow('+i+')">â</button></td>' +
       '</tr>';
   });
   renderInvoice();
 }
-function addInvRow() { invDetail.push({name:'',spec:'',qty:1,unit:'式',price:0,taxRate:10}); renderInvRows(); }
+function addInvRow() { invDetail.push({name:'',spec:'',qty:1,unit:'å¼',price:0,taxRate:10}); renderInvRows(); }
 function delInvRow(i) { invDetail.splice(i,1); renderInvRows(); }
 function updInvRow(i,k,v) {
   if (k==='qty'||k==='price'||k==='taxRate') v = Number(v);
@@ -346,11 +346,11 @@ function updInvRow(i,k,v) {
 // === Render Invoice Preview ===
 function renderInvoice() {
   document.getElementById('pInvNo').textContent = document.getElementById('invNo').value;
-  document.getElementById('pInvTo').textContent = document.getElementById('invTo').value + '　御中';
+  document.getElementById('pInvTo').textContent = document.getElementById('invTo').value + 'ãå¾¡ä¸­';
   const tanto = document.getElementById('invTanto').value;
-  document.getElementById('pInvTantoLine').textContent = tanto ? '担当：' + tanto + ' 様' : '';
-  document.getElementById('pInvDate').textContent = '請求日：' + fmtDate(document.getElementById('invDate').value);
-  document.getElementById('pInvDueLine').textContent = '振込期限：' + fmtDate(document.getElementById('invDue').value);
+  document.getElementById('pInvTantoLine').textContent = tanto ? 'æå½ï¼' + tanto + ' æ§' : '';
+  document.getElementById('pInvDate').textContent = 'è«æ±æ¥ï¼' + fmtDate(document.getElementById('invDate').value);
+  document.getElementById('pInvDueLine').textContent = 'æ¯è¾¼æéï¼' + fmtDate(document.getElementById('invDue').value);
   document.getElementById('pInvKoji').textContent = document.getElementById('invKoji').value;
 
   // Issuer right side
@@ -360,8 +360,8 @@ function renderInvoice() {
   const fax = document.getElementById('invFax').value;
   const regNo = document.getElementById('invRegNo').value;
   document.getElementById('pIssuerRight').innerHTML =
-    '<strong>' + comp + '</strong><br>' + addr + '<br>TEL: ' + tel + (fax ? '　FAX: ' + fax : '') +
-    (regNo ? '<br>登録番号: ' + regNo : '');
+    '<strong>' + comp + '</strong><br>' + addr + '<br>TEL: ' + tel + (fax ? 'ãFAX: ' + fax : '') +
+    (regNo ? '<br>ç»é²çªå·: ' + regNo : '');
 
   // Detail
   let subtotal8 = 0, subtotal10 = 0;
@@ -391,12 +391,12 @@ function renderInvoice() {
   document.getElementById('pInvTotal').textContent = fmt(total);
   document.getElementById('pInvTax8').textContent = fmt(tax8);
   document.getElementById('pInvTax10').textContent = fmt(tax10);
-  document.getElementById('pInvAmount').textContent = '御請求金額（税込）　' + fmt(total);
+  document.getElementById('pInvAmount').textContent = 'å¾¡è«æ±éé¡ï¼ç¨è¾¼ï¼ã' + fmt(total);
   document.getElementById('pInvRemarks').textContent = document.getElementById('invRemarks').value;
 
   document.getElementById('pIssuerBottom').innerHTML =
     '<div class="company">' + comp + '</div>' + addr + '<br>TEL: ' + tel +
-    (fax ? '　FAX: ' + fax : '') + (regNo ? '<br>登録番号: ' + regNo : '');
+    (fax ? 'ãFAX: ' + fax : '') + (regNo ? '<br>ç»é²çªå·: ' + regNo : '');
 }
 
 // === Render Receipt Preview ===
@@ -410,8 +410,8 @@ function renderReceipt() {
   const taxTotal = tax8 + tax10;
 
   document.getElementById('pRcpDate').textContent = fmtDate(document.getElementById('rcpDate').value);
-  document.getElementById('pRcpTo').textContent = document.getElementById('rcpTo').value + '　御中';
-  document.getElementById('pRcpAmount').textContent = '¥' + amount.toLocaleString() + '-';
+  document.getElementById('pRcpTo').textContent = document.getElementById('rcpTo').value + 'ãå¾¡ä¸­';
+  document.getElementById('pRcpAmount').textContent = 'Â¥' + amount.toLocaleString() + '-';
   document.getElementById('pRcpSubtotal').textContent = fmt(subtotal);
   document.getElementById('pRcpTax').textContent = fmt(taxTotal);
   document.getElementById('pRcpTotal').textContent = fmt(subtotal + taxTotal);
@@ -424,9 +424,9 @@ function renderReceipt() {
   const regNo = document.getElementById('rcpRegNo').value;
   document.getElementById('pRcpIssuer').innerHTML =
     '<div class="company">' + comp + '</div>' + addr + '<br>TEL: ' + tel +
-    (regNo ? '<br>登録番号: ' + regNo : '');
+    (regNo ? '<br>ç»é²çªå·: ' + regNo : '');
   const tanto = document.getElementById('rcpTanto').value;
-  document.getElementById('pRcpTantoLine').textContent = tanto ? '担当：' + tanto : '';
+  document.getElementById('pRcpTantoLine').textContent = tanto ? 'æå½ï¼' + tanto : '';
 }
 
 // === Draft Toggle ===
@@ -444,7 +444,7 @@ function toggleDraft(type) {
 function printDoc(type) {
   const el = type === 'invoice' ? document.getElementById('invoicePage') : document.getElementById('receiptPage');
   const w = window.open('', '_blank');
-  w.document.write('<html><head><title>印刷</title>');
+  w.document.write('<html><head><title>å°å·</title>');
   w.document.write('<style>' + document.querySelector('style').textContent + '</style>');
   w.document.write('</head><body style="margin:0">');
   w.document.write(el.outerHTML);
@@ -467,8 +467,8 @@ async function exportPDF(type) {
   const imgData = canvas.toDataURL('image/png');
   pdf.addImage(imgData, 'PNG', 0, 0, w, h);
   const filename = type === 'invoice'
-    ? '請求書_' + document.getElementById('invNo').value.replace(/[^0-9\-]/g,'') + '.pdf'
-    : '領収書_' + fmtDate(document.getElementById('rcpDate').value) + '.pdf';
+    ? 'è«æ±æ¸_' + document.getElementById('invNo').value.replace(/[^0-9\-]/g,'') + '.pdf'
+    : 'é åæ¸_' + fmtDate(document.getElementById('rcpDate').value) + '.pdf';
   pdf.save(filename);
 }
 
