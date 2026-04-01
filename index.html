@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>請求書・領収書 生成ツール</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -47,7 +47,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 .invoice-page{width:210mm;min-height:297mm;background:var(--white);padding:15mm 20mm 20mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
 
 /* === Receipt (B5変形: 128mm x 182mm) === */
-.receipt-page{width:128mm;min-height:182mm;background:var(--white);padding:10mm 12mm 12mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.receipt-page{width:128mm;min-height:182mm;background:var(--white);padding:10mm 12mm 12mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-size:10pt}
 
 /* === Common Document Styles === */
 .doc-header{text-align:center;margin-bottom:8mm}
@@ -69,8 +69,8 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 .receipt-page .amount-box{font-size:18pt;padding:10px 16px;margin-bottom:4mm}
 
 /* === Detail Table === */
-.detail-table{width:100%;border-collapse:collapse;margin-bottom:4mm;font-size:9pt}
-.detail-table th,.detail-table td{border:1px solid #000;padding:4px 6px}
+.detail-table{width:100%;border-collapse:collapse;margin-bottom:4mm;font-size:9pt;table-layout:fixed}
+.detail-table th,.detail-table td{border:1px solid #000;padding:4px 6px;word-wrap:break-word;overflow-wrap:break-word}
 .detail-table th{background:#f0f0f0;font-weight:normal;text-align:center;font-size:8pt}
 .detail-table td.num{text-align:right}
 .detail-table td.center{text-align:center}
@@ -127,8 +127,9 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 
 /* === Mobile === */
 @media(max-width:768px){
-  .preview-container{padding:8px}
-  .invoice-page,.receipt-page{transform-origin:top left;transform:scale(0.45)}
+  .preview-container{padding:4px;-webkit-overflow-scrolling:touch}
+  .invoice-page{transform-origin:top left;transform:scale(0.48);margin-bottom:-154mm}
+  .receipt-page{transform-origin:top left;transform:scale(0.72);margin-bottom:-50mm}
   .form-group{min-width:100%}
 }
 </style>
@@ -165,7 +166,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
   </div>
 
   <div class="form-row">
-    <div class="form-group"><label>振込先 銀行名</label><input id="invBankName" value="◆○銀行"></div>
+    <div class="form-group"><label>振込先 銀行名</label><input id="invBankName" value="○○銀行"></div>
     <div class="form-group"><label>支店名</label><input id="invBankBranch" value="○○支店"></div>
     <div class="form-group" style="flex:0.5"><label>口座種別</label><input id="invBankType" value="普通"></div>
     <div class="form-group"><label>口座番号</label><input id="invBankNo" value="1234567"></div>
@@ -183,7 +184,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-draft" onclick="toggleDraft('invoice')">下書きON/OFG</button>
+    <button class="btn btn-draft" onclick="toggleDraft('invoice')">下書きON/OFF</button>
     <button class="btn btn-print" onclick="printDoc('invoice')">🖨️ 印刷</button>
     <button class="btn btn-pdf" onclick="exportPDF('invoice')">📥 PDF出力</button>
   </div>
@@ -226,11 +227,11 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
     <div class="doc-header"><span class="doc-title">御 請 求 書</span></div>
     <div class="doc-no" id="pInvNo"></div>
 
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4mm">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4mm;gap:6mm">
       <div style="flex:1">
         <div class="doc-to" id="pInvTo"></div>
         <div style="font-size:9pt;margin-bottom:3mm" id="pInvTantoLine"></div>
-        <div class="doc-greeting">平素は格別のお引き立てを賜り厚く御礼瓳し上げます。<br>下記の通りご請求申し上げます。</div>
+        <div class="doc-greeting">平素は格別のお引き立てを賜り乘く御礼申し上げます。<br>下記の通りご請求申し上げます。</div>
       </div>
       <div class="doc-date-area">
         <div id="pInvDate"></div>
@@ -243,6 +244,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
     <div class="amount-box" id="pInvAmount"></div>
 
     <table class="detail-table">
+      <colgroup><col style="width:28%"><col style="width:22%"><col style="width:9%"><col style="width:8%"><col style="width:15%"><col style="width:18%"></colgroup>
       <thead><tr><th>名称</th><th>仕様</th><th>数量</th><th>単位</th><th>単価</th><th>金額</th></tr></thead>
       <tbody id="pInvDetailBody"></tbody>
     </table>
@@ -285,8 +287,8 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 
     <div class="receipt-but">但し 上記正に領収いたしました。</div>
 
-    <div style="font-size:8pt;margin-bottom:3mm">
-      <table class="summary-table" style="font-size:8pt">
+    <div style="font-size:9pt;margin-bottom:3mm">
+      <table class="summary-table" style="font-size:9pt">
         <tr><td class="label">小計 ①</td><td class="value" id="pRcpSubtotal"></td></tr>
         <tr><td class="label">消費税等 ② (❹+❺)</td><td class="value" id="pRcpTax"></td></tr>
         <tr><td class="label">合計 ③ (①+②)</td><td class="value" id="pRcpTotal"></td></tr>
@@ -299,7 +301,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
       </div>
     </div>
 
-    <div class="issuer-area" id="pRcpIssuer" style="font-size:8pt;line-height:1.6"></div>
+    <div class="issuer-area" id="pRcpIssuer" style="font-size:9pt;line-height:1.6"></div>
     <div class="receipt-担当" id="pRcpTantoLine"></div>
   </div>
 </div>
@@ -374,7 +376,7 @@ function renderInvoice() {
   const fax = document.getElementById('invFax').value;
   const regNo = document.getElementById('invRegNo').value;
   document.getElementById('pIssuerRight').innerHTML =
-    '<strong>' + comp + '</strong><br>' + addr + '<br>TEL: ' + tel + (fax ? '\u3000FAX: ' + fax : '') +
+    '<strong>' + comp + '</strong><br>' + addr + '<br>TEL: ' + tel + (fax ? '　FAX: ' + fax : '') +
     (regNo ? '<br>登録番号: ' + regNo : '');
 
   // Detail
@@ -405,7 +407,7 @@ function renderInvoice() {
   document.getElementById('pInvTotal').textContent = fmt(total);
   document.getElementById('pInvTax8').textContent = fmt(tax8);
   document.getElementById('pInvTax10').textContent = fmt(tax10);
-  document.getElementById('pInvAmount').textContent = '御請求金顝（税込）　' + fmt(total);
+  document.getElementById('pInvAmount').textContent = '御請求金額（税込）　' + fmt(total);
   document.getElementById('pInvRemarks').textContent = document.getElementById('invRemarks').value;
 
   // Bank info
@@ -415,12 +417,12 @@ function renderInvoice() {
   const bankNo = document.getElementById('invBankNo').value;
   const bankHolder = document.getElementById('invBankHolder').value;
   document.getElementById('pBankInfo').innerHTML =
-    bankName + '\u3000' + bankBranch + '\u3000' + bankType + '\u3000' + bankNo +
+    bankName + '　' + bankBranch + '　' + bankType + '　' + bankNo +
     '<br>口座名義：' + bankHolder;
 
   document.getElementById('pIssuerBottom').innerHTML =
     '<div class="company">' + comp + '</div>' + addr + '<br>TEL: ' + tel +
-    (fax ? '\u3000FAX: ' + fax : '') + (regNo ? '<br>登録番号: ' + regNo : '') +
+    (fax ? '　FAX: ' + fax : '') + (regNo ? '<br>登録番号: ' + regNo : '') +
     '<div class="seal-space">印</div>';
 }
 
@@ -435,7 +437,7 @@ function renderReceipt() {
   const taxTotal = tax8 + tax10;
 
   document.getElementById('pRcpDate').textContent = fmtDate(document.getElementById('rcpDate').value);
-  document.getElementById('pRcpTo').textContent = document.getElementById('rcpTo').value + '\u3000御中';
+  document.getElementById('pRcpTo').textContent = document.getElementById('rcpTo').value + '　御中';
   document.getElementById('pRcpAmount').textContent = '¥' + amount.toLocaleString() + '-';
   document.getElementById('pRcpSubtotal').textContent = fmt(subtotal);
   document.getElementById('pRcpTax').textContent = fmt(taxTotal);
