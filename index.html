@@ -41,7 +41,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 .detail-edit input[type="number"]{text-align:right}
 
 /* === Preview Container === */
-.preview-container{display:flex;justify-content:center;padding:16px;overflow-x:auto}
+.preview-container{display:flex;justify-content:center;padding:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* === Invoice (A4: 210mm x 297mm) === */
 .invoice-page{width:210mm;min-height:297mm;background:var(--white);padding:15mm 20mm 20mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
@@ -127,9 +127,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 
 /* === Mobile === */
 @media(max-width:768px){
-  .preview-container{padding:4px;-webkit-overflow-scrolling:touch}
-  .invoice-page{transform-origin:top left;transform:scale(0.48);margin-bottom:-154mm}
-  .receipt-page{transform-origin:top left;transform:scale(0.72);margin-bottom:-50mm}
+  .preview-container{padding:8px;justify-content:flex-start}
   .form-group{min-width:100%}
 }
 </style>
@@ -166,7 +164,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
   </div>
 
   <div class="form-row">
-    <div class="form-group"><label>振込先 銀行名</label><input id="invBankName" value="○○銀行"></div>
+    <div class="form-group"><label>振込先 鉠行名</label><input id="invBankName" value="◇○鉠行"></div>
     <div class="form-group"><label>支店名</label><input id="invBankBranch" value="○○支店"></div>
     <div class="form-group" style="flex:0.5"><label>口座種別</label><input id="invBankType" value="普通"></div>
     <div class="form-group"><label>口座番号</label><input id="invBankNo" value="1234567"></div>
@@ -199,7 +197,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
     <div class="form-group"><label>担当者</label><input id="rcpTanto" value="山田太郎"></div>
   </div>
   <div class="form-row">
-    <div class="form-group"><label>金額（税込）</label><input type="number" id="rcpAmount" value="137500"></div>
+    <div class="form-group"><label>金額（税輼）</label><input type="number" id="rcpAmount" value="137500"></div>
     <div class="form-group"><label>8%対象額（税抜）</label><input type="number" id="rcp8base" value="0"></div>
     <div class="form-group"><label>10%対象額（税抜）</label><input type="number" id="rcp10base" value="125000"></div>
   </div>
@@ -231,7 +229,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
       <div style="flex:1">
         <div class="doc-to" id="pInvTo"></div>
         <div style="font-size:9pt;margin-bottom:3mm" id="pInvTantoLine"></div>
-        <div class="doc-greeting">平素は格別のお引き立てを賜り乘く御礼申し上げます。<br>下記の通りご請求申し上げます。</div>
+        <div class="doc-greeting">平素は格別のお引き立てを賜り厚く御礼申し上げます。<br>下記の通りご請求瓳し上げます。</div>
       </div>
       <div class="doc-date-area">
         <div id="pInvDate"></div>
@@ -310,7 +308,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 // === State ===
 let invoiceDraft = false, receiptDraft = false;
 let invDetail = [
-  { name: '現場作業員派遣', spec: '日勤・8時間', qty: 5, unit: '人', price: 25000, taxRate: 10 }
+  { name: '現場作業員派遣', spec: '日勤ン8時間', qty: 5, unit: '人', price: 25000, taxRate: 10 }
 ];
 
 // === Tab Switch ===
