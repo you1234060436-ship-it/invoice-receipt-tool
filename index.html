@@ -158,7 +158,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
   <div class="form-row">
     <div class="form-group"><label>請求書番号</label><input id="invNo" value="No. 2026-010-101"></div>
     <div class="form-group"><label>請求日</label><input type="date" id="invDate" value="2026-04-01"></div>
-    <div class="form-group"><label>振込期限</label><input type="date" id="invDue" value="2026-04-30"></div>
+    <div class="form-group"><label>振込期限 <input type="checkbox" id="invDueShow" checked onchange="renderInvoice()"> 表示</label><input type="date" id="invDue" value="2026-04-30"></div>
   </div>
   <div class="form-row">
     <div class="form-group"><label>宛先</label><input id="invTo" value="合同会社デモフード"></div>
@@ -393,7 +393,8 @@ function renderInvoice() {
   document.getElementById('pInvTantoLine').textContent = tanto ? '担当：' + tanto : '';
   document.getElementById('pInvDate').textContent = '請求日：' + fmtDate(document.getElementById('invDate').value);
   const dueVal = document.getElementById('invDue').value;
-  document.getElementById('pInvDueLine').textContent = dueVal ? '振込期限：' + fmtDate(dueVal) : '';
+  const dueShow = document.getElementById('invDueShow').checked;
+  document.getElementById('pInvDueLine').textContent = (dueShow && dueVal) ? '振込期限：' + fmtDate(dueVal) : '';
   document.getElementById('pInvKoji').textContent = document.getElementById('invKoji').value;
 
   // Issuer right side
