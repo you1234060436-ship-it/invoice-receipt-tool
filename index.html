@@ -51,13 +51,13 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 .inv-card-del{position:absolute;top:8px;right:8px}
 
 /* === Preview Container === */
-.preview-container{display:flex;justify-content:center;padding:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.preview-container{padding:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* === Invoice (A4: 210mm x 297mm) === */
-.invoice-page{width:210mm;min-height:297mm;background:var(--white);padding:15mm 20mm 20mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.invoice-page{width:210mm;min-height:297mm;background:var(--white);padding:15mm 20mm 20mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15);flex-shrink:0}
 
 /* === Receipt (B5変形: 128mm x 182mm) === */
-.receipt-page{width:128mm;min-height:182mm;background:var(--white);padding:10mm 12mm 12mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-size:10pt}
+.receipt-page{width:128mm;min-height:182mm;background:var(--white);padding:10mm 12mm 12mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-size:10pt;flex-shrink:0}
 
 /* === Common Document Styles === */
 .doc-header{text-align:center;margin-bottom:8mm}
@@ -106,7 +106,8 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 /* === Issuer === */
 .issuer-area{text-align:right;margin-top:6mm;font-size:9pt;line-height:1.8;position:relative}
 .issuer-area .company{font-size:12pt;font-weight:bold}
-.seal-space{display:inline-block;width:22mm;height:22mm;border:1px solid #ccc;border-radius:50%;position:absolute;right:0;top:0;color:#ccc;font-size:7pt;text-align:center;line-height:22mm}
+.seal-space{display:inline-block;width:22mm;height:22mm;border:1px solid #c00;position:absolute;right:0;top:0;color:#c00;font-size:7pt;text-align:center;line-height:22mm}
+.receipt-page .doc-header{margin-top:0}
 .bank-info{border:1px solid #000;padding:6px 10px;font-size:9pt;margin-bottom:4mm;line-height:1.8}
 .bank-info .bank-label{font-size:8pt;font-weight:bold;margin-bottom:2px}
 
@@ -136,8 +137,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
 }
 
 /* === Mobile === */
-@media(max-width:768px){
-  .preview-container{padding:8px;justify-content:flex-start}
+@media(max-width:768px){.preview-container{padding:8px}.form-group{min-width:100%}.detail-edit{display:none}.inv-card{display:block}.controls{margin:8px}}
   .form-group{min-width:100%}
   .detail-edit{display:none}
   .inv-card{display:block}
@@ -291,7 +291,7 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS PMincho',serif;backgroun
     <div class="stamp-area">収入<br>印紙</div>
     <div class="doc-header" style="margin-top:2mm;text-align:center"><span class="doc-title">領 収 書</span></div>
 
-    <div style="text-align:right;font-size:9pt;margin-top:16mm;margin-bottom:3mm" id="pRcpDate"></div>
+    <div style="text-align:right;font-size:9pt;margin-top:4mm;margin-bottom:3mm" id="pRcpDate"></div>
     <div class="doc-to" id="pRcpTo" style="font-size:12pt"></div>
 
     <div class="amount-box" id="pRcpAmount"></div>
